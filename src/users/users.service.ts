@@ -12,8 +12,15 @@ export class UsersService {
     return createdUser;
   }
   async getUsers() {
-    const users = this.userRep.findAll();
-    return users;
+    try {
+      const users = this.userRep.findAll({ include: { all: true } });
+      return users;
+    } catch (e) {
+      throw new HttpException(
+        e.message,
+        e.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
   async getUserByEmail(email: string) {
     try {
