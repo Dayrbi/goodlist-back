@@ -1,4 +1,5 @@
-import { Table, DataType, Model, Column } from 'sequelize-typescript';
+import { Table, DataType, Model, Column, HasMany } from 'sequelize-typescript';
+import { List } from 'src/list/list.model';
 
 interface UsersCreationAtt {
   email: string;
@@ -23,4 +24,7 @@ export class User extends Model<User, UsersCreationAtt> {
 
   @Column({ type: DataType.STRING, allowNull: false })
   password: string;
+
+  @HasMany(() => List)
+  posts: List[];
 }

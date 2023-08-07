@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,7 +16,14 @@ export class UsersService {
     return users;
   }
   async getUserByEmail(email: string) {
-    const user = await this.userRep.findOne({ where: { email } });
-    return user;
+    try {
+      const user = await this.userRep.findOne({ where: { email } });
+      return user;
+    } catch (e) {
+      throw new HttpException(
+        e.message,
+        e.status || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
